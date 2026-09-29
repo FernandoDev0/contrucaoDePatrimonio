@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guarda do mês</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #071018;
+      --bg-2: #0c1822;
+      --card: rgba(16, 32, 44, 0.72);
+      --line: rgba(212, 175, 55, 0.18);
+      --gold: #e0c36a;
+      --gold-2: #b8943a;
+      --cream: #f3ead6;
+      --muted: #9bb0b8;
+      --green: #5ee0a8;
+      --track: #16303c;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: "Outfit", system-ui, sans-serif;
+      color: var(--cream);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(224, 195, 106, 0.12), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(94, 224, 168, 0.08), transparent 50%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 80px;
+    }
+
+    header.hero { display: grid; gap: 10px; margin-bottom: 28px; }
+    .eyebrow {
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.05;
+      margin: 0;
+      font-weight: 700;
+    }
+    .lead {
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      margin: 6px 0 0;
+    }
+    .notice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(224, 195, 106, 0.08);
+      color: var(--cream);
+      width: fit-content;
+      max-width: 720px;
+      margin-top: 8px;
+    }
+    .notice strong { color: var(--gold); }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold);
+      margin-top: 7px;
+      flex: none;
+    }
+    nav.switch {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    nav.switch a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+    }
+    nav.switch a.here {
+      color: #1a1406;
+      background: var(--gold);
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .controls { padding: 22px; display: grid; gap: 18px; }
+    .control {
+      display: grid;
+      gap: 10px;
+      padding: 14px 14px 16px;
+      border-radius: 16px;
+      background: rgba(7, 16, 24, 0.45);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .control-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .control h2 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .value {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 26px;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .hint { font-size: 12px; color: var(--muted); margin: 0; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      margin: 8px 0 0;
+      padding: 0;
+      cursor: pointer;
+      touch-action: pan-y;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #c9a227 0%, #e8d48a var(--p, 0%), #16303c var(--p, 0%));
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 10px;
+      border-radius: 999px;
+      background: transparent;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff6d4, #d4af37 45%, #8a6a22);
+      border: 2px solid #2a210c;
+      margin-top: -8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+    input[type="range"]::-moz-range-track {
+      height: 10px;
+      border-radius: 999px;
+      background: transparent;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e0c36a;
+      border: 2px solid #2a210c;
+    }
+    .scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #6e8790;
+    }
+
+    .report { padding: 22px; }
+    .report h3 {
+      font-family: "Fraunces", Georgia, serif;
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0 8px;
+    }
+    .kpi {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(7, 16, 24, 0.5);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .kpi.wide { grid-column: 1 / -1; }
+    .kpi span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .kpi b {
+      display: block;
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .kpi .up { color: var(--green); }
+    .kpi .soft { color: var(--gold); }
+    .story {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .story em { color: var(--cream); font-style: normal; font-weight: 600; }
+
+    .split {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .split-bar {
+      display: flex;
+      height: 14px;
+      border-radius: 99px;
+      overflow: hidden;
+      background: var(--track);
+    }
+    .split-bar i { display: block; height: 100%; }
+    .split-bar .saved { background: linear-gradient(90deg, #8a6a22, #e8d48a); }
+    .split-bar .left { background: #2f6f5a; }
+    .legend {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .legend b { color: var(--cream); font-weight: 600; }
+
+    .months-block { margin-top: 28px; }
+    .months-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .months-head h3 {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 22px;
+    }
+    .scroll-hint { color: var(--muted); font-size: 12px; }
+
+    .month-rail {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 6px 4px 18px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .month-rail::-webkit-scrollbar { height: 8px; }
+    .month-rail::-webkit-scrollbar-thumb {
+      background: var(--gold-2);
+      border-radius: 99px;
+    }
+    .month-rail::-webkit-scrollbar-track { background: var(--track); border-radius: 99px; }
+
+    .month-card {
+      flex: 0 0 min(220px, 78vw);
+      scroll-snap-align: start;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(224,195,106,0.08), rgba(7,16,24,0.7));
+      border: 1px solid var(--line);
+    }
+    .month-card small {
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+    .month-card h4 {
+      margin: 8px 0 12px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 22px;
+    }
+    .month-card .meta {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .month-card .meta li {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .month-card .meta b { color: var(--cream); font-weight: 600; }
+
+    footer {
+      margin-top: 18px;
+      color: #6e8790;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr; }
+      .value { font-size: 22px; }
+      .notice { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="eyebrow">Guarda do mês</div>
+      <h1>Arraste para o lado e veja o que junta e o que sobra.</h1>
+      <p class="lead">Sem digitar números. Escolha o salário, quanto guardar por mês e quantos meses no ano. O relatório mostra o valor juntado e o que restou do salário nesse período.</p>
+      <nav class="switch">
+        <a href="index.html">Simulador de patrimônio</a>
+        <a class="here" href="guardar.html">Guarda do mês</a>
+      </nav>
+      <div class="notice">
+        <span class="dot"></span>
+        <div><strong>Use o salário líquido</strong>, o valor que cai na conta. Não use o salário bruto.</div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel controls" aria-label="Parâmetros">
+        <article class="control">
+          <div class="control-head">
+            <h2>Salário líquido mensal</h2>
+            <div class="value" id="vSalario">R$ 5.000</div>
+          </div>
+          <input type="range" id="salario" min="1500" max="40000" step="100" value="5000" />
+          <div class="scale"><span>R$ 1.500</span><span>R$ 40.000</span></div>
+          <p class="hint">Valor líquido, depois de descontos. Não é o bruto.</p>
+        </article>
+
+        <article class="control">
+          <div class="control-head">
+            <h2>Valor a guardar por mês</h2>
+            <div class="value" id="vGuardar">R$ 500</div>
+          </div>
+          <input type="range" id="guardar" min="0" max="5000" step="50" value="500" />
+          <div class="scale"><span>R$ 0</span><span id="maxGuardar">R$ 5.000</span></div>
+          <p class="hint">Não passa do salário líquido. O que não guardar, sobra para o mês.</p>
+        </article>
+
+        <article class="control">
+          <div class="control-head">
+            <h2>Quantidade de meses no ano</h2>
+            <div class="value" id="vMeses">12 meses</div>
+          </div>
+          <input type="range" id="meses" min="1" max="12" step="1" value="12" />
+          <div class="scale"><span>1 mês</span><span>12 meses</span></div>
+        </article>
+      </section>
+
+      <aside class="panel report" aria-live="polite">
+        <div class="eyebrow">Resultado</div>
+        <h3>Juntado e sobra</h3>
+        <div class="kpis">
+          <div class="kpi"><span>Juntado nos meses</span><b class="up" id="kJuntado">—</b></div>
+          <div class="kpi"><span>Sobra do salário nos meses</span><b class="soft" id="kSobra">—</b></div>
+          <div class="kpi"><span>Salário no período</span><b id="kTotalSalario">—</b></div>
+          <div class="kpi"><span>Sobra por mês</span><b id="kSobraMes">—</b></div>
+        </div>
+        <div class="split">
+          <div class="split-bar" aria-hidden="true">
+            <i class="saved" id="barSaved"></i>
+            <i class="left" id="barLeft"></i>
+          </div>
+          <div class="legend">
+            <span>Guardado <b id="legSaved">—</b></span>
+            <span>Sobra <b id="legLeft">—</b></span>
+          </div>
+        </div>
+        <p class="story" id="story"></p>
+      </aside>
+    </div>
+
+    <section class="months-block">
+      <div class="months-head">
+        <h3>Cada mês</h3>
+        <div class="scroll-hint">Role para os lados para ver os meses</div>
+      </div>
+      <div class="month-rail" id="monthRail"></div>
+      <footer>Conta simples, sem juros: guardar × meses, e o que resta do salário líquido nesses mesmos meses.</footer>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const salario = $("salario");
+    const guardar = $("guardar");
+    const meses = $("meses");
+    const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+    const brl = (n) => n.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0
+    });
+
+    function fillTrack(el) {
+      const min = Number(el.min);
+      const max = Number(el.max);
+      const val = Number(el.value);
+      const p = max === min ? 0 : ((val - min) / (max - min)) * 100;
+      el.style.setProperty("--p", p + "%");
+    }
+
+    function mesesLabel(n) {
+      return n === 1 ? "1 mês" : n + " meses";
+    }
+
+    function render() {
+      const wage = Number(salario.value);
+      guardar.max = String(wage);
+      if (Number(guardar.value) > wage) guardar.value = String(wage);
+      $("maxGuardar").textContent = brl(wage);
+
+      const save = Number(guardar.value);
+      const n = Number(meses.value);
+      const leftoverMonth = wage - save;
+      const juntado = save * n;
+      const sobra = leftoverMonth * n;
+      const totalWage = wage * n;
+      const savedPct = totalWage === 0 ? 0 : (juntado / totalWage) * 100;
+      const leftPct = 100 - savedPct;
+
+      $("vSalario").textContent = brl(wage);
+      $("vGuardar").textContent = brl(save);
+      $("vMeses").textContent = mesesLabel(n);
+
+      [salario, guardar, meses].forEach(fillTrack);
+
+      $("kJuntado").textContent = brl(juntado);
+      $("kSobra").textContent = brl(sobra);
+      $("kTotalSalario").textContent = brl(totalWage);
+      $("kSobraMes").textContent = brl(leftoverMonth);
+      $("barSaved").style.width = savedPct + "%";
+      $("barLeft").style.width = leftPct + "%";
+      $("legSaved").textContent = brl(juntado);
+      $("legLeft").textContent = brl(sobra);
+
+      $("story").innerHTML =
+        `Com salário líquido de ${brl(wage)}, você guarda ${brl(save)} por mês e sobra ${brl(leftoverMonth)} para o resto do mês. ` +
+        `Em ${mesesLabel(n)}, o valor juntado é <em>${brl(juntado)}</em> e a sobra do salário no período é <em>${brl(sobra)}</em>.`;
+
+      $("monthRail").innerHTML = MESES.slice(0, n).map((nome, i) => `
+        <article class="month-card">
+          <small>Mês ${i + 1}</small>
+          <h4>${nome}</h4>
+          <ul class="meta">
+            <li><span>Guardado</span><b>${brl(save)}</b></li>
+            <li><span>Sobra do salário</span><b>${brl(leftoverMonth)}</b></li>
+          </ul>
+        </article>
+      `).join("");
+    }
+
+    [salario, guardar, meses].forEach((el) => el.addEventListener("input", render));
+    render();
+  </script>
+</body>
+</html>

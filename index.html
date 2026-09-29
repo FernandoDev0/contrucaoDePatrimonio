@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Construção de Patrimônio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #071018;
+      --bg-2: #0c1822;
+      --card: rgba(16, 32, 44, 0.72);
+      --line: rgba(212, 175, 55, 0.18);
+      --gold: #e0c36a;
+      --gold-2: #b8943a;
+      --cream: #f3ead6;
+      --muted: #9bb0b8;
+      --green: #5ee0a8;
+      --red-soft: #ffb4a2;
+      --track: #16303c;
+      --fill: linear-gradient(90deg, #8a6a22, #e8d48a);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: "Outfit", system-ui, sans-serif;
+      color: var(--cream);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(224, 195, 106, 0.12), transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, rgba(94, 224, 168, 0.08), transparent 50%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 80px;
+    }
+
+    header.hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .eyebrow {
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.05;
+      margin: 0;
+      font-weight: 700;
+    }
+    .lead {
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      margin: 6px 0 0;
+    }
+    .notice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(224, 195, 106, 0.08);
+      color: var(--cream);
+      width: fit-content;
+      max-width: 720px;
+      margin-top: 8px;
+    }
+    nav.switch {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    nav.switch a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+    }
+    nav.switch a.here {
+      color: #1a1406;
+      background: var(--gold);
+      border-color: transparent;
+      font-weight: 600;
+    }
+    .notice strong { color: var(--gold); }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold);
+      margin-top: 7px;
+      flex: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .controls { padding: 22px; display: grid; gap: 18px; }
+    .control {
+      display: grid;
+      gap: 10px;
+      padding: 14px 14px 16px;
+      border-radius: 16px;
+      background: rgba(7, 16, 24, 0.45);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .control-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .control h2 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .value {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 26px;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .hint { font-size: 12px; color: var(--muted); margin: 0; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      margin: 8px 0 0;
+      padding: 0;
+      cursor: pointer;
+      touch-action: pan-y;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #c9a227 0%, #e8d48a var(--p, 0%), #16303c var(--p, 0%));
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 10px;
+      border-radius: 999px;
+      background: transparent;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff6d4, #d4af37 45%, #8a6a22);
+      border: 2px solid #2a210c;
+      margin-top: -8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    }
+    input[type="range"]::-moz-range-track {
+      height: 10px;
+      border-radius: 999px;
+      background: transparent;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e0c36a;
+      border: 2px solid #2a210c;
+    }
+    .scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #6e8790;
+    }
+
+    .report { padding: 22px; }
+    .report h3 {
+      font-family: "Fraunces", Georgia, serif;
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0 8px;
+    }
+    .kpi.wide { grid-column: 1 / -1; }
+    .kpi {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(7, 16, 24, 0.5);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .kpi span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .kpi b {
+      display: block;
+      margin-top: 6px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .kpi .up { color: var(--green); }
+    .story {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .story em { color: var(--cream); font-style: normal; font-weight: 600; }
+
+    .years-block { margin-top: 28px; }
+    .years-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .years-head h3 { margin: 0; font-size: 22px; }
+    .scroll-hint { color: var(--muted); font-size: 12px; }
+
+    .year-rail {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 6px 4px 18px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .year-rail::-webkit-scrollbar { height: 8px; }
+    .year-rail::-webkit-scrollbar-thumb {
+      background: var(--gold-2);
+      border-radius: 99px;
+    }
+    .year-rail::-webkit-scrollbar-track { background: var(--track); border-radius: 99px; }
+
+    .year-card {
+      flex: 0 0 min(240px, 78vw);
+      scroll-snap-align: start;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(224,195,106,0.08), rgba(7,16,24,0.7));
+      border: 1px solid var(--line);
+    }
+    .year-card .meta {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .year-card .meta li {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .year-card .meta b { color: var(--cream); font-weight: 600; }
+    .year-card.goal {
+      border-color: rgba(94, 224, 168, 0.45);
+      background: linear-gradient(180deg, rgba(94,224,168,0.12), rgba(7,16,24,0.7));
+    }
+    .year-card small {
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+    .year-card h4 {
+      margin: 8px 0 10px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 22px;
+    }
+    .year-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .bar {
+      height: 6px;
+      border-radius: 99px;
+      background: var(--track);
+      margin: 12px 0 8px;
+      overflow: hidden;
+    }
+    .bar i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #8a6a22, #e8d48a);
+      border-radius: 99px;
+    }
+
+    footer {
+      margin-top: 18px;
+      color: #6e8790;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr; }
+      .value { font-size: 22px; }
+      .notice { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="eyebrow">Simulador de patrimônio</div>
+      <h1>Arraste as barras e veja o caminho até o final.</h1>
+      <p class="lead">Sem digitar números. Só deslize para os lados, monte o cenário e acompanhe o relatório simples com o objetivo de cada ano.</p>
+      <nav class="switch">
+        <a class="here" href="index.html">Simulador de patrimônio</a>
+        <a href="guardar.html">Guarda do mês</a>
+      </nav>
+      <div class="notice">
+        <span class="dot"></span>
+        <div><strong>Use o salário líquido</strong>, o valor que realmente cai na conta. Não use o salário bruto da carteira.</div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel controls" aria-label="Parâmetros">
+        <article class="control">
+          <div class="control-head">
+            <h2>Salário líquido mensal</h2>
+            <div class="value" id="vSalario">R$ 5.000</div>
+          </div>
+          <input type="range" id="salario" min="1500" max="40000" step="100" value="5000" />
+          <div class="scale"><span>R$ 1.500</span><span>R$ 40.000</span></div>
+          <p class="hint">Valor líquido, depois de descontos. Não é o bruto.</p>
+        </article>
+
+        <article class="control">
+          <div class="control-head">
+            <h2>% do salário investido</h2>
+            <div class="value" id="vPctSalario">1%</div>
+          </div>
+          <input type="range" id="pctSalario" min="1" max="50" step="1" value="1" />
+          <div class="scale"><span>1%</span><span>50%</span></div>
+          <p class="hint">Por padrão começa em 1% do líquido.</p>
+        </article>
+
+        <article class="control">
+          <div class="control-head">
+            <h2>% da renda fixa ao ano</h2>
+            <div class="value" id="vPctRenda">12%</div>
+          </div>
+          <input type="range" id="pctRenda" min="4" max="18" step="0.1" value="12" />
+          <div class="scale"><span>4% a.a.</span><span>18% a.a.</span></div>
+          <p class="hint">Rentabilidade estimada da renda fixa, ao ano.</p>
+        </article>
+
+        <article class="control">
+          <div class="control-head">
+            <h2>Quanto já tem acumulado</h2>
+            <div class="value" id="vAcumulado">R$ 0</div>
+          </div>
+          <input type="range" id="acumulado" min="0" max="1000" step="1" value="0" />
+          <div class="scale"><span>R$ 0</span><span>R$ 2 mi</span></div>
+        </article>
+
+        <article class="control">
+          <div class="control-head">
+            <h2>Anos continuando a investir</h2>
+            <div class="value" id="vAnos">20 anos</div>
+          </div>
+          <input type="range" id="anos" min="1" max="40" step="1" value="20" />
+          <div class="scale"><span>1 ano</span><span>40 anos</span></div>
+        </article>
+      </section>
+
+      <aside class="panel report" aria-live="polite">
+        <div class="eyebrow">Relatório simples</div>
+        <h3>Quanto tempo até o final</h3>
+        <div class="kpis">
+          <div class="kpi"><span>Aporte mensal</span><b id="kAporte">—</b></div>
+          <div class="kpi"><span>Patrimônio no final</span><b class="up" id="kFinal">—</b></div>
+          <div class="kpi"><span>Total investido</span><b id="kInvestido">—</b></div>
+          <div class="kpi"><span>Juros no caminho</span><b class="up" id="kJuros">—</b></div>
+          <div class="kpi wide"><span>Tempo para o rendimento cobrir o salário líquido</span><b id="kTempo">—</b></div>
+        </div>
+        <p class="story" id="story"></p>
+      </aside>
+    </div>
+
+    <section class="years-block">
+      <div class="years-head">
+        <h3>Objetivos no ano</h3>
+        <div class="scroll-hint">Role para os lados para ver cada ano</div>
+      </div>
+      <div class="year-rail" id="yearRail"></div>
+      <footer>
+        Cálculo com aportes mensais e juros compostos mês a mês, usando a taxa anual da renda fixa. É uma projeção, não uma garantia de rentabilidade.
+      </footer>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const salario = $("salario");
+    const pctSalario = $("pctSalario");
+    const pctRenda = $("pctRenda");
+    const acumulado = $("acumulado");
+    const anos = $("anos");
+
+    const brl = (n) => n.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0
+    });
+
+    const pct = (n) => n.toLocaleString("pt-BR", {
+      minimumFractionDigits: Number.isInteger(n) ? 0 : 1,
+      maximumFractionDigits: 1
+    }) + "%";
+
+    function fillTrack(el) {
+      const min = Number(el.min);
+      const max = Number(el.max);
+      const val = Number(el.value);
+      const p = ((val - min) / (max - min)) * 100;
+      el.style.setProperty("--p", p + "%");
+    }
+
+    function accumFromPos(pos) {
+      const p = Number(pos);
+      if (p <= 0) return 0;
+      const raw = Math.pow(p / 1000, 2.35) * 2000000;
+      if (raw < 5000) return Math.round(raw / 100) * 100;
+      if (raw < 20000) return Math.round(raw / 500) * 500;
+      if (raw < 100000) return Math.round(raw / 1000) * 1000;
+      if (raw < 500000) return Math.round(raw / 5000) * 5000;
+      return Math.round(raw / 10000) * 10000;
+    }
+
+    function anosLabel(n) {
+      const txt = n.toLocaleString("pt-BR", { maximumFractionDigits: 1 });
+      return n === 1 ? "1 ano" : txt + " anos";
+    }
+
+    function grow(start, monthly, annualRate, years) {
+      const r = Math.pow(1 + annualRate, 1 / 12) - 1;
+      const series = [];
+      let balance = start;
+      for (let y = 1; y <= years; y++) {
+        const before = balance;
+        for (let m = 0; m < 12; m++) {
+          balance = balance * (1 + r) + monthly;
+        }
+        series.push({
+          year: y,
+          end: balance,
+          contributed: monthly * 12,
+          yield: balance - before - monthly * 12
+        });
+      }
+      return series;
+    }
+
+    function yearsToIndependence(start, monthly, annualRate, salary) {
+      const target = salary * 12 / annualRate;
+      const r = Math.pow(1 + annualRate, 1 / 12) - 1;
+      let balance = start;
+      if (balance >= target) return { years: 0, target };
+      for (let m = 1; m <= 12 * 80; m++) {
+        balance = balance * (1 + r) + monthly;
+        if (balance >= target) {
+          return { years: m / 12, target };
+        }
+      }
+      return { years: null, target };
+    }
+
+    function render() {
+      const wage = Number(salario.value);
+      const savePct = Number(pctSalario.value);
+      const ratePct = Number(pctRenda.value);
+      const already = accumFromPos(acumulado.value);
+      const yearsN = Number(anos.value);
+      const monthly = wage * (savePct / 100);
+      const annualRate = ratePct / 100;
+
+      $("vSalario").textContent = brl(wage);
+      $("vPctSalario").textContent = pct(savePct);
+      $("vPctRenda").textContent = pct(ratePct);
+      $("vAcumulado").textContent = brl(already);
+      $("vAnos").textContent = anosLabel(yearsN);
+
+      [salario, pctSalario, pctRenda, acumulado, anos].forEach(fillTrack);
+
+      const series = grow(already, monthly, annualRate, yearsN);
+      const last = series[series.length - 1];
+      const invested = already + monthly * 12 * yearsN;
+      const interest = last.end - invested;
+
+      $("kAporte").textContent = brl(monthly);
+      $("kFinal").textContent = brl(last.end);
+      $("kInvestido").textContent = brl(invested);
+      $("kJuros").textContent = brl(Math.max(0, interest));
+
+      const indep = yearsToIndependence(already, monthly, annualRate, wage);
+      let tempoTxt = "além de 80 anos";
+      let indepTxt = `Com esse ritmo, o rendimento anual cobrir o salário líquido fica além de 80 anos. O alvo seria ${brl(indep.target)}.`;
+      if (indep.years === 0) {
+        tempoTxt = "já chegou";
+        indepTxt = "Os juros anuais da renda fixa já cobrem um salário líquido.";
+      } else if (indep.years != null) {
+        tempoTxt = anosLabel(indep.years);
+        indepTxt = indep.years <= yearsN
+          ? `Dentro do prazo, por volta de <em>${anosLabel(indep.years)}</em>, os juros anuais passam a cobrir o salário líquido (alvo de ${brl(indep.target)}).`
+          : `O final do prazo que você escolheu é em <em>${anosLabel(yearsN)}</em>. Para os juros anuais cobrirem o salário líquido, o ritmo atual pede cerca de <em>${anosLabel(indep.years)}</em> e um patrimônio de ${brl(indep.target)}.`;
+      }
+
+      $("kTempo").textContent = tempoTxt;
+      $("story").innerHTML =
+        `Guardando ${pct(savePct)} do salário líquido de ${brl(wage)}, o aporte é ${brl(monthly)} por mês. ` +
+        `Em ${anosLabel(yearsN)} a ${pct(ratePct)} a.a., o final estimado é <em>${brl(last.end)}</em>. ` +
+        indepTxt;
+
+      const maxEnd = last.end || 1;
+      $("yearRail").innerHTML = series.map((row) => {
+        const w = Math.max(6, (row.end / maxEnd) * 100);
+        const isGoal = indep.years != null && row.year === Math.ceil(indep.years) && indep.years <= yearsN;
+        return `
+          <article class="year-card${isGoal ? " goal" : ""}">
+            <small>Ano ${row.year}${isGoal ? " · chegada" : ""}</small>
+            <h4>${brl(row.end)}</h4>
+            <div class="bar"><i style="width:${w}%"></i></div>
+            <ul class="meta">
+              <li><span>Aporte no ano</span><b>${brl(row.contributed)}</b></li>
+              <li><span>Juros no ano</span><b>${brl(Math.max(0, row.yield))}</b></li>
+            </ul>
+          </article>
+        `;
+      }).join("");
+    }
+
+    [salario, pctSalario, pctRenda, acumulado, anos].forEach((el) => {
+      el.addEventListener("input", render);
+    });
+
+    render();
+  </script>
+</body>
+</html>
